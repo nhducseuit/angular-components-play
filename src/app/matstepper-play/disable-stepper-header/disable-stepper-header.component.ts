@@ -1,23 +1,20 @@
-import { FakeHttpService } from './../../services/fake-http.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AsyncValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
-import { Observable, of } from 'rxjs';
-import { map, filter, tap } from 'rxjs/operators';
+import { FakeHttpService } from 'src/app/services/fake-http.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { StepperSelectionEvent } from '@angular/cdk/stepper';
+import { tap, filter, map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 
 @Component({
-  selector: 'npw-matstepper-play',
-  templateUrl: './matstepper-play.component.html',
-  styleUrls: ['./matstepper-play.component.scss']
+  selector: 'npw-disable-stepper-header',
+  templateUrl: './disable-stepper-header.component.html',
+  styleUrls: ['./disable-stepper-header.component.scss']
 })
-export class MatstepperPlayComponent implements OnInit {
+export class DisableStepperHeaderComponent implements OnInit {
 
   isLinear = false;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
-  isDuplicated: boolean;
-  selectedStep = 1;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -48,10 +45,13 @@ export class MatstepperPlayComponent implements OnInit {
         asyncValidators: this.checkInformationNotChanged()
       });
 
-    this.firstFormGroup.statusChanges.subscribe((status: string) => {
-      console.log('Status ', status);
-      console.log('1st formgroup error ', this.firstFormGroup.errors);
-      this.isDuplicated = status.toLowerCase() === 'invalid' && this.firstFormGroup.hasError('duplicateName');
+    this.firstFormGroup.statusChanges.pipe(
+      tap(status => console.log('Name form status is ', status)),
+      filter((status: string) => status.toLowerCase() === 'invalid' && this.firstFormGroup.hasError('duplicateName'))
+    ).subscribe(() => {
+      this.snackBar.open('Your name is duplicated', 'OK', {
+        duration: 1000
+      });
     });
 
     this.secondFormGroup.statusChanges.pipe(
@@ -78,27 +78,5 @@ export class MatstepperPlayComponent implements OnInit {
       }
       return of(null);
     };
-  }
-
-  onStepHeaderClicked(step: number) {
-    if (this.selectedStep === 1 && this.isDuplicated && step > 1) {
-      this.showDuplicateDialog();
-    }
-  }
-
-  private showDuplicateDialog() {
-    this.snackBar.open('Your name is duplicated', 'OK', {
-      duration: 1000
-    });
-  }
-
-  stepSelectionChanged(event: StepperSelectionEvent) {
-    this.selectedStep = event.selectedIndex + 1;
-  }
-
-  firstFormNextClicked() {
-    if (this.isDuplicated) {
-      this.showDuplicateDialog();
-    }
   }
 }

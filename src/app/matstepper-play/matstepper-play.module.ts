@@ -11,9 +11,11 @@ import { MatInputModule } from '@angular/material/input';
 import { ServicesModule } from '../services/services.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { DisableStepperHeaderComponent } from './disable-stepper-header/disable-stepper-header.component';
+import { StepperHeaderTweakerDirective } from './stepper-header-tweaker.directive';
 
 @NgModule({
-  declarations: [MatstepperPlayComponent],
+  declarations: [MatstepperPlayComponent, DisableStepperHeaderComponent, StepperHeaderTweakerDirective],
   imports: [
     CommonModule,
     FormsModule,
