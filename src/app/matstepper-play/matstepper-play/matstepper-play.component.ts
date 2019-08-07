@@ -17,6 +17,7 @@ export class MatstepperPlayComponent implements OnInit {
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
   isDuplicated: boolean;
+  isUnchanged: boolean;
   selectedStep = 1;
 
   constructor(
@@ -49,18 +50,11 @@ export class MatstepperPlayComponent implements OnInit {
       });
 
     this.firstFormGroup.statusChanges.subscribe((status: string) => {
-      console.log('Status ', status);
-      console.log('1st formgroup error ', this.firstFormGroup.errors);
       this.isDuplicated = status.toLowerCase() === 'invalid' && this.firstFormGroup.hasError('duplicateName');
     });
 
-    this.secondFormGroup.statusChanges.pipe(
-      tap(status => console.log('Address form status is ', status, 'Has notChanged error = ', this.secondFormGroup.hasError('notChanged'))),
-      filter((status: string) => status.toLowerCase() === 'invalid' && this.secondFormGroup.hasError('notChanged')),
-    ).subscribe(() => {
-      this.snackBar.open('Your address is not changed', 'OK', {
-        duration: 1000
-      });
+    this.secondFormGroup.statusChanges.subscribe((status: string) => {
+      this.isUnchanged = status.toLowerCase() === 'invalid' && this.secondFormGroup.hasError('notChanged');
     });
   }
 
@@ -84,6 +78,9 @@ export class MatstepperPlayComponent implements OnInit {
     if (this.selectedStep === 1 && this.isDuplicated && step > 1) {
       this.showDuplicateDialog();
     }
+    if (this.selectedStep === 2 && this.isUnchanged && step > 2) {
+      this.showUnchangedDialog();
+    }
   }
 
   private showDuplicateDialog() {
@@ -100,5 +97,17 @@ export class MatstepperPlayComponent implements OnInit {
     if (this.isDuplicated) {
       this.showDuplicateDialog();
     }
+  }
+
+  secondFormNextClicked() {
+    if (this.isUnchanged) {
+      this.showUnchangedDialog();
+    }
+  }
+
+  private showUnchangedDialog() {
+    this.snackBar.open('Your address is not changed', 'OK', {
+      duration: 1000
+    });
   }
 }
