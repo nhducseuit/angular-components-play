@@ -1,0 +1,12 @@
+
+<form [formGroup]="nameFormGroup">
+  <mat-form-field>
+    <input matInput placeholder="First name" formControlName="firstName">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Last name" formControlName="lastName">
+  </mat-form-field>
+  <div>
+    <button mat-button (click)="checkFormStatus()">Check form status</button>
+  </div>
+</form>
