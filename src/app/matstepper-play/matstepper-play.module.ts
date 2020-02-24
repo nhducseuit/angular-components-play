@@ -14,9 +14,10 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { DisableStepperHeaderComponent } from './disable-stepper-header/disable-stepper-header.component';
 import { StepperHeaderTweakerDirective } from './stepper-header-tweaker.directive';
 import { FormFilledProgrammaticallyComponent } from './form-filled-programmatically/form-filled-programmatically.component';
+import { AutoFocusFormComponent } from './auto-focus-form/auto-focus-form.component';
 
 @NgModule({
-  declarations: [MatstepperPlayComponent, DisableStepperHeaderComponent, StepperHeaderTweakerDirective, FormFilledProgrammaticallyComponent],
+  declarations: [MatstepperPlayComponent, DisableStepperHeaderComponent, StepperHeaderTweakerDirective, FormFilledProgrammaticallyComponent, AutoFocusFormComponent],
   imports: [
     CommonModule,
     FormsModule,
